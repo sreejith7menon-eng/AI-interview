@@ -13,7 +13,7 @@ def test_root_returns_application_information() -> None:
     assert response.json() == {
         "application": "AI Interview Copilot",
         "message": "Backend is running.",
-        "version": "0.1.0",
+        "version": "0.2.0",
     }
 
 
