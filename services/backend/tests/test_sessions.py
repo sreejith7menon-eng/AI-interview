@@ -57,3 +57,8 @@ def test_invalid_session_transitions_return_409(tmp_path, monkeypatch) -> None:
     assert stopped.status_code == 200
     restarted = client.post(f"/api/sessions/{created['id']}/start")
     assert restarted.status_code == 409
+
+
+def test_blank_session_title_is_rejected() -> None:
+    response = client.post("/api/sessions", json={"title": "   "})
+    assert response.status_code == 422
