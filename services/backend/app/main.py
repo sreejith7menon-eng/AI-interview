@@ -4,11 +4,15 @@ from datetime import datetime, timezone
 
 from fastapi import FastAPI
 
+from app.api.sessions import router as sessions_router
+
 app = FastAPI(
     title="AI Interview Copilot",
     description="Local backend for the AI Interview Copilot desktop application.",
-    version="0.1.0",
+    version="0.2.0",
 )
+
+app.include_router(sessions_router)
 
 
 @app.get("/", tags=["default"])
@@ -17,7 +21,7 @@ async def root() -> dict[str, str]:
     return {
         "application": "AI Interview Copilot",
         "message": "Backend is running.",
-        "version": "0.1.0",
+        "version": "0.2.0",
     }
 
 
