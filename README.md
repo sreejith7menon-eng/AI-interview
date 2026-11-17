@@ -28,7 +28,7 @@ Technology choices are documented in [Architecture](docs/ARCHITECTURE.md) and ma
 
 ```text
 apps/desktop/       Electron + React desktop application (planned)
-services/backend/   FastAPI local service (initial scaffold implemented)
+services/backend/   FastAPI local service with SQLite session API
 services/audio/     Audio capture and preprocessing (planned)
 services/speech/    VAD and transcription (planned)
 services/ai/        Provider adapters and prompt orchestration (planned)
@@ -40,7 +40,7 @@ tests/              Cross-component automated tests (planned)
 
 ## Development status
 
-**Initial backend scaffold implemented.** The FastAPI service currently exposes `GET /` and `GET /health`. Automated endpoint tests and local development instructions are included. Desktop UI, session persistence, audio capture, transcription, document processing, and AI provider integrations are not implemented yet.
+**Backend foundation and initial session management implemented.** The FastAPI service exposes root and health endpoints plus SQLite-backed session creation, listing, retrieval, start, and stop operations. Automated tests and local development instructions are included. Desktop UI, audio capture, transcription, document processing, settings persistence, and AI provider integrations are not implemented yet.
 
 See:
 - [Backend setup](services/backend/README.md)
