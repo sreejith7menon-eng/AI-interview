@@ -27,22 +27,23 @@ Technology choices are documented in [Architecture](docs/ARCHITECTURE.md) and ma
 ## Repository layout
 
 ```text
-apps/desktop/       Electron + React desktop application
-services/backend/   FastAPI local service
-services/audio/     Audio capture and preprocessing
-services/speech/    VAD and transcription
-services/ai/        Provider adapters and prompt orchestration
-services/documents/ Resume and job-description parsing
-services/context/   Local retrieval and conversation context
+apps/desktop/       Electron + React desktop application (planned)
+services/backend/   FastAPI local service (initial scaffold implemented)
+services/audio/     Audio capture and preprocessing (planned)
+services/speech/    VAD and transcription (planned)
+services/ai/        Provider adapters and prompt orchestration (planned)
+services/documents/ Resume and job-description parsing (planned)
+services/context/   Local retrieval and conversation context (planned)
 docs/               Product, architecture, and roadmap documents
-tests/              Automated tests
+tests/              Cross-component automated tests (planned)
 ```
 
 ## Development status
 
-**Preparation / architecture phase.** No production functionality has been implemented yet.
+**Initial backend scaffold implemented.** The FastAPI service currently exposes `GET /` and `GET /health`. Automated endpoint tests and local development instructions are included. Desktop UI, session persistence, audio capture, transcription, document processing, and AI provider integrations are not implemented yet.
 
 See:
+- [Backend setup](services/backend/README.md)
 - [Requirements](docs/REQUIREMENTS.md)
 - [Architecture](docs/ARCHITECTURE.md)
 - [Roadmap](docs/ROADMAP.md)
