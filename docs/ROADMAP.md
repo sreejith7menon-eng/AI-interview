@@ -6,15 +6,18 @@
 - [x] Document requirements and architecture.
 - [ ] Confirm repository visibility and branch settings.
 - [ ] Create project board/issues from roadmap.
-- [ ] Verify target Windows/Python/Node toolchain.
+- [x] Verify target Windows/Python/Node toolchain.
 
 ## Phase 1 — Foundation
 - [ ] Add Electron + React + TypeScript application shell.
-- [ ] Add Python FastAPI service.
+- [x] Add initial Python FastAPI service with root and health endpoints.
 - [ ] Establish typed IPC and local WebSocket event protocol.
 - [ ] Add SQLite migrations and settings repository.
 - [ ] Add structured logging with secret/PII redaction.
-- [ ] Add unit-test and lint/type-check workflows.
+- [x] Add initial backend endpoint tests and local development instructions.
+- [ ] Add CI, lint, and type-check workflows.
+
+**Current status:** Backend API scaffold is committed. Desktop shell, secure desktop/backend authentication, persistent settings, and full CI are still pending.
 
 **Exit criteria:** Desktop app starts, launches/stops local backend, reports health, and persists settings.
 
