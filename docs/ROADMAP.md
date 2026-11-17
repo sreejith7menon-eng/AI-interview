@@ -12,12 +12,13 @@
 - [ ] Add Electron + React + TypeScript application shell.
 - [x] Add initial Python FastAPI service with root and health endpoints.
 - [ ] Establish typed IPC and local WebSocket event protocol.
-- [ ] Add SQLite migrations and settings repository.
+- [ ] Add versioned SQLite migrations and settings repository.
+- [x] Add basic SQLite persistence for interview sessions.
 - [ ] Add structured logging with secret/PII redaction.
-- [x] Add initial backend endpoint tests and local development instructions.
+- [x] Add backend endpoint and session lifecycle tests with local development instructions.
 - [ ] Add CI, lint, and type-check workflows.
 
-**Current status:** Backend API scaffold is committed. Desktop shell, secure desktop/backend authentication, persistent settings, and full CI are still pending.
+**Current status:** FastAPI service and SQLite-backed session lifecycle API are committed. Desktop shell, secure desktop/backend authentication, versioned migrations, persistent settings, structured logging, and full CI are still pending.
 
 **Exit criteria:** Desktop app starts, launches/stops local backend, reports health, and persists settings.
 
@@ -64,7 +65,8 @@
 **Exit criteria:** The response can use relevant candidate/job context without uploading full documents by default.
 
 ## Phase 6 — Desktop workflows and privacy
-- [ ] Add session lifecycle and history.
+- [x] Add initial session lifecycle API and local session history storage.
+- [ ] Add session history UI and review workflows.
 - [ ] Add floating/compact session window.
 - [ ] Add privacy mode and emergency hide/stop controls.
 - [ ] Add clear capture status and notification privacy.
