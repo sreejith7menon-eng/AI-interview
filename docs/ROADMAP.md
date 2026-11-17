@@ -9,16 +9,17 @@
 - [x] Verify target Windows/Python/Node toolchain.
 
 ## Phase 1 — Foundation
-- [ ] Add Electron + React + TypeScript application shell.
+- [x] Add initial Electron + React + TypeScript application shell.
 - [x] Add initial Python FastAPI service with root and health endpoints.
-- [ ] Establish typed IPC and local WebSocket event protocol.
+- [x] Establish a narrow typed Electron preload/IPC bridge for app and session operations.
+- [ ] Add local WebSocket event protocol.
 - [ ] Add versioned SQLite migrations and settings repository.
 - [x] Add basic SQLite persistence for interview sessions.
 - [ ] Add structured logging with secret/PII redaction.
 - [x] Add backend endpoint and session lifecycle tests with local development instructions.
 - [ ] Add CI, lint, and type-check workflows.
 
-**Current status:** FastAPI service and SQLite-backed session lifecycle API are committed. Desktop shell, secure desktop/backend authentication, versioned migrations, persistent settings, structured logging, and full CI are still pending.
+**Current status:** Initial Electron/React desktop shell and typed preload bridge are committed, with dashboard controls connected to the loopback FastAPI session API. Backend auto-launch, authenticated desktop/backend requests, versioned migrations, persistent settings, structured logging, and full CI remain pending.
 
 **Exit criteria:** Desktop app starts, launches/stops local backend, reports health, and persists settings.
 
@@ -66,7 +67,8 @@
 
 ## Phase 6 — Desktop workflows and privacy
 - [x] Add initial session lifecycle API and local session history storage.
-- [ ] Add session history UI and review workflows.
+- [x] Add initial dashboard session list/create/start/stop UI.
+- [ ] Add full session history and review workflows.
 - [ ] Add floating/compact session window.
 - [ ] Add privacy mode and emergency hide/stop controls.
 - [ ] Add clear capture status and notification privacy.
