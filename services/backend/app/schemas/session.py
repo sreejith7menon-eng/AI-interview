@@ -1,10 +1,18 @@
 """Schemas for interview session endpoints."""
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class SessionCreate(BaseModel):
     title: str = Field(default="Interview session", min_length=1, max_length=120)
+
+    @field_validator("title")
+    @classmethod
+    def normalize_title(cls, value: str) -> str:
+        title = value.strip()
+        if not title:
+            raise ValueError("Session title cannot be blank.")
+        return title
 
 
 class SessionRead(BaseModel):
