@@ -27,7 +27,7 @@ Technology choices are documented in [Architecture](docs/ARCHITECTURE.md) and ma
 ## Repository layout
 
 ```text
-apps/desktop/       Electron + React desktop application (planned)
+apps/desktop/       Electron + React + TypeScript desktop shell
 services/backend/   FastAPI local service with SQLite session API
 services/audio/     Audio capture and preprocessing (planned)
 services/speech/    VAD and transcription (planned)
@@ -40,9 +40,10 @@ tests/              Cross-component automated tests (planned)
 
 ## Development status
 
-**Backend foundation and initial session management implemented.** The FastAPI service exposes root and health endpoints plus SQLite-backed session creation, listing, retrieval, start, and stop operations. Automated tests and local development instructions are included. Desktop UI, audio capture, transcription, document processing, settings persistence, and AI provider integrations are not implemented yet.
+**Initial desktop shell and backend session management implemented.** The Electron + React dashboard connects to the local FastAPI service through a restricted preload bridge and supports session creation, listing, starting, and stopping. The backend persists session metadata in SQLite. Audio capture, transcription, document processing, backend auto-launch, settings persistence, and AI provider integrations are not implemented yet.
 
 See:
+- [Desktop setup](apps/desktop/README.md)
 - [Backend setup](services/backend/README.md)
 - [Requirements](docs/REQUIREMENTS.md)
 - [Architecture](docs/ARCHITECTURE.md)
