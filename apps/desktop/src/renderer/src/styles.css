@@ -77,3 +77,34 @@ h1 { font-size: 23px; margin: 7px 0 0; letter-spacing: -.7px; }
 .action-button { padding: 8px 11px; background: rgba(243, 150, 31, .14); color: #f1b35d; border: 1px solid rgba(243, 150, 31, .22); }.action-button.stop { background: rgba(217, 105, 105, .12); border-color: rgba(217, 105, 105, .2); color: #e99b9b; }
 .completed-label { color: #828ca3; font-size: 9px; }
 footer { border-top: 1px solid var(--line); margin-top: 30px; padding-top: 15px; color: #64708a; font-size: 9px; } footer span { padding: 0 6px; color: #d69a4b; }
+
+
+.privacy-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 22px 0 30px;
+  padding: 20px 22px;
+  border: 1px solid rgba(126, 153, 201, 0.2);
+  border-radius: 16px;
+  background: rgba(19, 29, 52, 0.72);
+}
+.privacy-panel-copy { display: grid; gap: 6px; min-width: 0; }
+.privacy-panel-copy strong { color: #f3f6ff; font-size: 15px; }
+.privacy-panel-copy p { margin: 0; color: #aab6ce; font-size: 13px; line-height: 1.55; }
+.privacy-panel-copy small { color: #8292b2; font-size: 11px; }
+.privacy-toggle {
+  flex: 0 0 auto;
+  border: 1px solid #536789;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: transparent;
+  color: #e8efff;
+  cursor: pointer;
+}
+.privacy-toggle.enabled { border-color: #4dba91; background: rgba(48, 153, 113, 0.14); color: #8be0bc; }
+.privacy-toggle:disabled { opacity: 0.55; cursor: not-allowed; }
+@media (max-width: 720px) {
+  .privacy-panel { align-items: flex-start; flex-direction: column; }
+}
