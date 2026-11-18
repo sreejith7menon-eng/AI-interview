@@ -96,3 +96,29 @@
 ## Release gates
 
 No phase is complete solely because the feature works once. Each phase requires automated tests where practical, a manual Windows acceptance checklist, and documented known limitations.
+
+
+## Commercial product milestones
+
+### Phase 9 — Productization
+- [ ] Select product name, visual identity, and domain.
+- [ ] Complete third-party software, native dependency, and model licence audit.
+- [ ] Define privacy policy, terms, data retention, and support process.
+- [ ] Establish product analytics with privacy-minimizing defaults.
+- [ ] Add crash reporting with sensitive-data redaction and opt-in controls.
+
+### Phase 10 — Accounts, subscriptions, and entitlements
+- [ ] Design account and device identity.
+- [ ] Add hosted entitlement API and signed session/plan claims.
+- [ ] Add server-side usage metering and quota enforcement.
+- [ ] Add billing-provider abstraction and India-ready payment provider selection.
+- [ ] Add plan management, cancellation, renewal, invoices, and webhook verification.
+- [ ] Keep provider keys server-side for hosted plans; keep BYOK secrets local.
+- [ ] Add abuse controls, rate limits, idempotency, and reconciliation jobs.
+
+### Phase 11 — Commercial beta
+- [ ] Validate onboarding, installation, updates, and uninstall behavior.
+- [ ] Run a closed beta with measured inference and support costs.
+- [ ] Finalize free/paid quotas and INR pricing from actual unit economics.
+- [ ] Test subscription expiry, failed renewal, refunds, and cancellation.
+- [ ] Publish support, privacy, security, and product documentation.
