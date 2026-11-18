@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import type { InterviewSession } from "../../shared/types";
+import type { InterviewSession, ScreenPrivacyStatus } from "../../shared/types";
 
 type Notice = { kind: "success" | "error"; message: string } | null;
 
@@ -14,6 +14,8 @@ export default function App() {
   const [version, setVersion] = useState("0.1.0");
   const [backendOnline, setBackendOnline] = useState(false);
   const [sessions, setSessions] = useState<InterviewSession[]>([]);
+  const [privacy, setPrivacy] = useState<ScreenPrivacyStatus | null>(null);
+  const [privacyBusy, setPrivacyBusy] = useState(false);
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState<string | null>(null);
@@ -39,8 +41,24 @@ export default function App() {
 
   useEffect(() => {
     void window.copilot.getAppVersion().then(setVersion);
+    void window.copilot.getScreenPrivacyStatus().then(setPrivacy);
     void refresh();
   }, [refresh]);
+
+  async function togglePrivacyProtection() {
+    if (!privacy) return;
+    setPrivacyBusy(true);
+    setNotice(null);
+    try {
+      const updated = await window.copilot.setScreenPrivacyProtection(!privacy.enabled);
+      setPrivacy(updated);
+      setNotice({ kind: "success", message: updated.enabled ? "Screen privacy protection enabled." : "Screen privacy protection disabled." });
+    } catch (error) {
+      setNotice({ kind: "error", message: error instanceof Error ? error.message : "Could not update screen privacy protection." });
+    } finally {
+      setPrivacyBusy(false);
+    }
+  }
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -81,7 +99,7 @@ export default function App() {
       <aside className="sidebar">
         <div className="brand">
           <div className="brand-mark">AI</div>
-          <div><strong>Interview Copilot</strong><span>PERSONAL WORKSPACE</span></div>
+          <div><strong>Interview Copilot</strong><span>PRODUCT WORKSPACE</span></div>
         </div>
         <div className="nav-label">WORKSPACE</div>
         <button className="nav-item active"><span>▦</span> Overview</button>
@@ -114,6 +132,18 @@ export default function App() {
             <div className="orbit-core"><span>AI</span></div>
             <i className="spark spark-one" /><i className="spark spark-two" />
           </div>
+        </section>
+
+        <section className="privacy-panel">
+          <div className="privacy-panel-copy">
+            <span className="eyebrow">SCREEN PRIVACY</span>
+            <strong>{privacy?.enabled ? "Capture protection is on" : "Capture protection is off"}</strong>
+            <p>{privacy?.message ?? "Checking operating-system privacy support…"}</p>
+            <small>{privacy?.supported ? `Supported platform: ${privacy.platform}` : `Limited platform support: ${privacy?.platform ?? "checking"}`}</small>
+          </div>
+          <button className={`privacy-toggle ${privacy?.enabled ? "enabled" : ""}`} onClick={() => void togglePrivacyProtection()} disabled={!privacy || privacyBusy}>
+            {privacyBusy ? "Saving…" : privacy?.enabled ? "Turn off" : "Turn on"}
+          </button>
         </section>
 
         {!backendOnline && (
