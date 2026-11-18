@@ -16,9 +16,18 @@ export interface SessionList {
   offset: number;
 }
 
+export interface ScreenPrivacyStatus {
+  enabled: boolean;
+  supported: boolean;
+  platform: string;
+  message: string;
+}
+
 export interface CopilotApi {
   getAppVersion: () => Promise<string>;
   getBackendHealth: () => Promise<boolean>;
+  getScreenPrivacyStatus: () => Promise<ScreenPrivacyStatus>;
+  setScreenPrivacyProtection: (enabled: boolean) => Promise<ScreenPrivacyStatus>;
   listSessions: () => Promise<SessionList>;
   createSession: (title: string) => Promise<InterviewSession>;
   startSession: (sessionId: string) => Promise<InterviewSession>;
