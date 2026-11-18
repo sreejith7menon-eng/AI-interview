@@ -1,8 +1,53 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { join } from "node:path";
-import type { InterviewSession, SessionList } from "../shared/types";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
+import type { InterviewSession, ScreenPrivacyStatus, SessionList } from "../shared/types";
 
 const BACKEND_URL = "http://127.0.0.1:8000";
+const PRIVACY_SETTINGS_FILE = "desktop-settings.json";
+let screenPrivacyProtectionEnabled = true;
+
+async function loadDesktopSettings(): Promise<void> {
+  try {
+    const raw = await readFile(join(app.getPath("userData"), PRIVACY_SETTINGS_FILE), "utf8");
+    const settings = JSON.parse(raw) as { screenPrivacyProtectionEnabled?: unknown };
+    if (typeof settings.screenPrivacyProtectionEnabled === "boolean") {
+      screenPrivacyProtectionEnabled = settings.screenPrivacyProtectionEnabled;
+    }
+  } catch {
+    // First launch or an unreadable settings file: use the privacy-protective default.
+  }
+}
+
+async function persistDesktopSettings(): Promise<void> {
+  const directory = app.getPath("userData");
+  await mkdir(directory, { recursive: true });
+  await writeFile(
+    join(directory, PRIVACY_SETTINGS_FILE),
+    JSON.stringify({ screenPrivacyProtectionEnabled }, null, 2),
+    "utf8"
+  );
+}
+
+function getScreenPrivacyStatus(): ScreenPrivacyStatus {
+  const platform = process.platform;
+  const supported = platform === "win32" || platform === "darwin";
+  const platformName = platform === "win32" ? "Windows" : platform === "darwin" ? "macOS" : platform;
+  return {
+    enabled: screenPrivacyProtectionEnabled,
+    supported,
+    platform: platformName,
+    message: supported
+      ? "The operating system capture-exclusion hint is enabled for this app's windows. Some capture and recording methods may still include them."
+      : "This platform does not provide the same supported window capture-exclusion behavior. Treat app content as visible when sharing your screen."
+  };
+}
+
+function applyScreenPrivacyProtection(): void {
+  for (const window of BrowserWindow.getAllWindows()) {
+    if (!window.isDestroyed()) window.setContentProtection(screenPrivacyProtectionEnabled);
+  }
+}
 
 async function backendRequest<T>(path: string, init?: RequestInit): Promise<T> {
   let response: Response;
@@ -34,6 +79,14 @@ function registerIpcHandlers(): void {
     } catch {
       return false;
     }
+  });
+  ipcMain.handle("privacy:get-screen-protection", () => getScreenPrivacyStatus());
+  ipcMain.handle("privacy:set-screen-protection", async (_event, enabled: unknown) => {
+    if (typeof enabled !== "boolean") throw new Error("Privacy setting must be a boolean.");
+    screenPrivacyProtectionEnabled = enabled;
+    applyScreenPrivacyProtection();
+    await persistDesktopSettings();
+    return getScreenPrivacyStatus();
   });
   ipcMain.handle("sessions:list", () => backendRequest<SessionList>("/api/sessions"));
   ipcMain.handle("sessions:create", (_event, title: string) =>
@@ -69,6 +122,7 @@ function createWindow(): void {
       sandbox: true
     }
   });
+  window.setContentProtection(screenPrivacyProtectionEnabled);
 
   if (process.env.ELECTRON_RENDERER_URL) {
     void window.loadURL(process.env.ELECTRON_RENDERER_URL);
@@ -77,7 +131,8 @@ function createWindow(): void {
   }
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  await loadDesktopSettings();
   registerIpcHandlers();
   createWindow();
 
