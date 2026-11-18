@@ -147,3 +147,12 @@ Start with local Whisper Base/Small benchmarking and a small quantized local LLM
 - Select local embedding model and vector index only when retrieval requirements justify them.
 - Confirm current Gemini model identifiers and quotas at implementation time.
 - Decide whether screenshot OCR belongs in the MVP or a later milestone.
+
+
+## 12. Screen privacy implementation
+
+The Electron main process owns a persisted `screenPrivacyProtectionEnabled` preference. It applies the preference through `BrowserWindow.setContentProtection()` to every existing app window and to each new window at creation. The setting is stored in the Electron user-data directory, not in the repository.
+
+The renderer accesses the preference through the typed preload bridge only. The UI displays the current state, platform support, and a limitation message. This is a best-effort OS capture-exclusion request; behavior varies by operating system and capture API. Do not describe it as guaranteed or undetectable. The implementation must not add taskbar hiding, window stealth, meeting-client manipulation, or proctoring evasion.
+
+See [Screen privacy implementation and acceptance checklist](SCREEN-PRIVACY.md).
