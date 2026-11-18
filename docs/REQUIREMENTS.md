@@ -2,21 +2,21 @@
 
 ## 1. Product goal
 
-Build a personal-use Windows desktop application that helps a user prepare for and navigate permitted interview-assistance workflows. It combines live speech transcription, question detection, candidate-provided context, and AI-generated suggested answers.
+Build a Windows-first desktop product for interview preparation and permitted meeting workflows. It combines live speech transcription, question detection, candidate-provided context, and AI-generated suggested answers. The product is being developed for a future subscription business, with local-first processing and optional cloud AI.
 
-The product must not be designed to bypass proctoring, conceal prohibited assistance, or evade interview-platform monitoring. Capture and privacy controls must be transparent and must respect interview rules and participant consent.
+The product must not be designed to bypass proctoring, conceal prohibited assistance, or evade interview-platform monitoring. Capture and privacy controls must be transparent and respect interview rules and participant consent.
 
 ## 2. Target platform and users
 
 - Primary platform: Windows 10/11, with Windows 11 as the primary development target.
-- User model: single local user; no account system or SaaS backend required for the initial release.
-- Repository: private personal repository.
-- Runtime: local desktop app and local backend service.
+- Initial user model: single local user; subscription accounts and entitlement checks are later milestones.
+- Runtime: desktop app and local backend service.
+- Future commercial model: free tier, paid tiers, and potentially a bring-your-own-key/local mode. Prices and quotas are not fixed until operating costs are measured.
 
 ## 3. Functional requirements
 
 ### FR-01 — Desktop shell
-- Provide a dashboard, session view, settings, model/provider settings, and document library.
+- Provide dashboard, session view, settings, provider settings, and document library.
 - Show service status and whether audio capture is active.
 - Support start, pause, resume, and stop controls.
 
@@ -40,7 +40,7 @@ The product must not be designed to bypass proctoring, conceal prohibited assist
 
 ### FR-05 — AI response generation
 - Use a provider abstraction, with Gemini as the initial cloud integration.
-- Support streaming responses where the provider supports it.
+- Support streaming responses where available.
 - Generate concise, conversational, technical, STAR, and detailed response styles.
 - Include uncertainty handling and avoid fabricating candidate experience.
 - Provide a local-model fallback when configured.
@@ -55,14 +55,15 @@ The product must not be designed to bypass proctoring, conceal prohibited assist
 ### FR-07 — Technical and coding assistance
 - Support technical explanations, troubleshooting reasoning, system design prompts, code examples, and code explanations.
 - Clearly label generated suggestions as AI-generated.
-- Avoid claiming that generated code has been executed or verified unless tests actually ran.
+- Avoid claiming generated code has been executed or verified unless tests actually ran.
 
-### FR-08 — Screenshot/OCR (later phase)
+### FR-08 — Screenshot/OCR
 - Allow deliberate user-initiated screenshot import or capture.
-- Perform OCR locally.
+- Perform OCR locally where practical.
 - Add local vision-model support only after the text/OCR workflow is stable.
+- Explain when an image is sent to an external model.
 
-### FR-09 — Mock interview (later phase)
+### FR-09 — Mock interview
 - Generate practice questions from a job description.
 - Support follow-up questions and structured feedback.
 - Keep practice sessions local by default.
@@ -70,14 +71,18 @@ The product must not be designed to bypass proctoring, conceal prohibited assist
 ### FR-10 — Session history and analytics
 - Save sessions locally only when enabled.
 - Allow export and deletion.
-- Provide a transcript and question/answer review.
+- Provide transcript and question/answer review.
 - Provide a clear retention setting.
 
-### FR-11 — Privacy and presentation controls
+### FR-11 — Screen privacy and capture transparency
+- Provide a user-controlled setting to request OS-level capture exclusion for the app's own windows.
+- Enable the setting by default on first launch.
+- Persist the user's preference locally.
+- Show whether the platform is supported and explain limitations.
+- Apply the setting to all existing windows and newly created windows.
 - Show an obvious capture indicator whenever audio capture is active.
 - Provide an emergency stop for capture and processing.
-- Provide controls to prevent accidental exposure of private documents, transcripts, and notifications.
-- Support supported Windows capture-exclusion mechanisms where appropriate, while clearly documenting their limitations.
+- Do not hide the app from the taskbar, manipulate meeting software, suppress capture indicators, or claim to be undetectable.
 - Do not implement stealth, proctoring evasion, or concealment of prohibited assistance.
 
 ### FR-12 — Cost and provider controls
@@ -87,33 +92,43 @@ The product must not be designed to bypass proctoring, conceal prohibited assist
 - Do not automatically switch to a paid provider or enable billing.
 - Keep model names and provider quotas configurable because availability changes.
 
+### FR-13 — Subscription and entitlement system (later phase)
+- Support account identity, plan entitlements, usage counters, and subscription lifecycle.
+- Enforce quotas server-side for hosted AI usage.
+- Keep payment provider integration behind a billing abstraction.
+- Never store payment-card details directly.
+- Provide clear cancellation, renewal, invoice, and data-deletion workflows.
+- Preserve a local/BYOK path where feasible.
+
 ## 4. Non-functional requirements
 
-- Offline-capable core: local capture, transcription, document parsing, storage, and configured local model fallback work without internet.
+- Offline-capable core: local capture, transcription, document parsing, storage, and configured local-model fallback work without internet.
 - Cloud AI is optional and requires internet.
 - Bind local backend only to loopback by default.
 - Keep API keys out of renderer code, logs, source control, and crash reports.
-- Use encrypted/secure OS storage for packaged credentials where feasible.
+- Use secure OS storage for packaged credentials where feasible.
 - Handle model/provider failures without stopping audio capture.
 - Keep queues bounded and support cancellation of stale answer-generation tasks.
-- Provide diagnostics for CPU, RAM, GPU/VRAM where available.
+- Provide diagnostics for CPU, RAM, and GPU/VRAM where available.
 - Support a 60-minute soak test without unbounded memory growth.
+- Minimize personal data collection and document retention behavior.
 
 ## 5. Initial acceptance criteria
 
-The first end-to-end prototype is accepted when:
-1. The desktop app can start and stop local system-audio and microphone capture independently.
+1. Desktop app can start and stop local system-audio and microphone capture independently.
 2. Audio is transcribed locally.
 3. A completed question can be manually or automatically selected.
 4. Relevant user-approved context can be retrieved locally.
 5. A configured AI provider can generate a suggested answer.
 6. The answer streams into the UI without blocking audio capture.
-7. The app works with internet disconnected for local capture/transcription and reports cloud AI unavailable without crashing.
+7. App works with internet disconnected for local capture/transcription and reports cloud AI unavailable without crashing.
 8. No secret or personal document is committed to the repository.
+9. Screen privacy preference persists across restarts and is applied to every app window.
+10. Platform-specific capture behavior is tested and limitations are displayed honestly.
 
 ## 6. Out of scope for the first milestone
 
-- macOS/Linux support.
+- macOS/Linux feature parity.
 - Multi-user accounts and cloud synchronization.
 - Subscription billing.
 - Automatic meeting-platform integration.
